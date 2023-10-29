@@ -1,0 +1,15 @@
+/* Remove default padding and margins */
+body, html, .row, .col-4 {
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Make outer panels fill vertical space */
+  .full-height-panel {
+    height: 100vh;
+  }
+
+  /* Make inside panels take 50% height each */
+  .half-height-panel {
+    height: 50vh;
+  }
