@@ -14,28 +14,45 @@
                     </div>
                     <div class="card-body">
                         <div class="input-group">
-                            <input type="text" id="frontyard-plant-name-input" class="form-control plant-name-input" placeholder="Plant name">
-                            <div class="input-group-append">
-                                <button id="frontyard-add-plant-button" class="btn btn-primary add-plant-button" type="button">Add Plant</button>
-                            </div>
+                            <form method="post" action="/add-plant">
+                                <input type="hidden" name="position" value="0"> <!-- 0 for Front Yard, 1 for ISL, etc. -->
+                                <input type="text" name="plant_name" class="form-control" placeholder="Plant name">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-primary">Add Plant</button>
+                                </div>
+                            </form>
                         </div>
                         <table id="frontyard-plant-table" class="table plant-table">
-                        <thead>
-                            <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Next Water</th>
-                            <th scope="col">Frequency</th>
-                            <th scope="col">Events</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Table Rows Here -->
-                        </tbody>
+                            <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Next Water</th>
+                                    <th scope="col">Frequency</th>
+                                    <th scope="col">Events</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for plant in organized_data[0] %} <!-- '0' for Front Yard, '1' for ISL, etc. -->
+                                <tr>
+                                    <td>{{ plant.name }}</td>
+                                    <td>{{ plant.today_water }}</td>
+                                    <td>{{ plant.water_schedule }} days</td>
+                                    <td>
+                                        {% if plant.food_event %}
+                                        <span>Food!</span><br>
+                                        {% endif %}
+                                        {% if plant.repotting_event %}
+                                        <span>Check pot!</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            
+
             <!-- Inside -->
             <div class="col-4">
                 <!-- Sunlight -->
@@ -45,10 +62,13 @@
                     </div>
                     <div class="card-body">
                         <div class="input-group">
-                            <input type="text" id="isl-plant-name-input" class="form-control plant-name-input" placeholder="Plant name">
-                            <div class="input-group-append">
-                                <button id="isl-add-plant-button" class="btn btn-primary add-plant-button" type="button">Add Plant</button>
-                            </div>
+                            <form method="post" action="/add-plant">
+                                <input type="hidden" name="position" value="1"> <!-- 0 for Front Yard, 1 for ISL, etc. -->
+                                <input type="text" name="plant_name" class="form-control" placeholder="Plant name">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-primary">Add Plant</button>
+                                </div>
+                            </form>
                         </div>
                         <table id="isl-plant-table" class="table plant-table">
                         <thead>
@@ -60,7 +80,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Table Rows Here -->
+                            {% for plant in organized_data[1] %} <!-- '0' for Front Yard, '1' for ISL, etc. -->
+                            <tr>
+                                <td>{{ plant.name }}</td>
+                                <td>{{ plant.today_water }}</td>
+                                <td>{{ plant.water_schedule }} days</td>
+                                <td>
+                                    {% if plant.food_event %}
+                                    <span>Food!</span><br>
+                                    {% endif %}
+                                    {% if plant.repotting_event %}
+                                    <span>Check pot!</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
                         </tbody>
                         </table>
                     </div>
@@ -72,10 +106,13 @@
                     </div>
                     <div class="card-body">
                         <div class="input-group">
-                            <input type="text" id="ill-plant-name-input" class="form-control plant-name-input" placeholder="Plant name">
-                            <div class="input-group-append">
-                                <button id="ill-add-plant-button" class="btn btn-primary add-plant-button" type="button">Add Plant</button>
-                            </div>
+                            <form method="post" action="/add-plant">
+                                <input type="hidden" name="position" value="2"> <!-- 0 for Front Yard, 1 for ISL, etc. -->
+                                <input type="text" name="plant_name" class="form-control" placeholder="Plant name">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-primary">Add Plant</button>
+                                </div>
+                            </form>
                         </div>
                         <table id="ill-plant-table" class="table plant-table">
                         <thead>
@@ -87,7 +124,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Table Rows Here -->
+                            {% for plant in organized_data[2] %} <!-- '0' for Front Yard, '1' for ISL, etc. -->
+                            <tr>
+                                <td>{{ plant.name }}</td>
+                                <td>{{ plant.today_water }}</td>
+                                <td>{{ plant.water_schedule }} days</td>
+                                <td>
+                                    {% if plant.food_event %}
+                                    <span>Food!</span><br>
+                                    {% endif %}
+                                    {% if plant.repotting_event %}
+                                    <span>Check pot!</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
                         </tbody>
                         </table>
                     </div>
@@ -102,10 +153,13 @@
                     </div>
                     <div class="card-body">
                         <div class="input-group">
-                            <input type="text" id="backyard-plant-name-input" class="form-control plant-name-input" placeholder="Plant name">
-                            <div class="input-group-append">
-                                <button id="backyard-add-plant-button" class="btn btn-primary add-plant-button" type="button">Add Plant</button>
-                            </div>
+                            <form method="post" action="/add-plant">
+                                <input type="hidden" name="position" value="3"> <!-- 0 for Front Yard, 1 for ISL, etc. -->
+                                <input type="text" name="plant_name" class="form-control" placeholder="Plant name">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-primary">Add Plant</button>
+                                </div>
+                            </form>
                         </div>
                         <table id="backyard-plant-table" class="table plant-table">
                         <thead>
@@ -117,7 +171,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Table Rows Here -->
+                            {% for plant in organized_data[3] %} <!-- '0' for Front Yard, '1' for ISL, etc. -->
+                            <tr>
+                                <td>{{ plant.name }}</td>
+                                <td>{{ plant.today_water }}</td>
+                                <td>{{ plant.water_schedule }} days</td>
+                                <td>
+                                    {% if plant.food_event %}
+                                    <span>Food!</span><br>
+                                    {% endif %}
+                                    {% if plant.repotting_event %}
+                                    <span>Check pot!</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
                         </tbody>
                         </table>
                     </div>
@@ -126,55 +194,3 @@
         </div>
     </body>
 </html>
-<!-- Place this in the script tag or in an external JavaScript file -->
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        let buttons = document.querySelectorAll('.add-plant-button');
-        buttons.forEach(function(button) {
-            button.addEventListener('click', function(event) {
-            let panel = event.target.closest('.panel');
-            let input = panel.querySelector('.plant-name-input');
-            let table = panel.querySelector('.plant-table');
-            let newRow = table.insertRow();
-            let cell1 = newRow.insertCell(0);
-            let cell2 = newRow.insertCell(1);
-            let cell3 = newRow.insertCell(2);
-            let cell4 = newRow.insertCell(3);
-            plant_name = input.value;
-            cell1.innerHTML = plant_name;
-            cell2.innerHTML = "Next Water";
-            cell3.innerHTML = "Frequency";
-            cell4.innerHTML = "";
-            input.value = "";
-            // Add this inside your button click event, after adding a new row
-            newRow.addEventListener('click', function(event) {
-                if (this.classList.contains('expanded')) {
-                    this.classList.remove('expanded');
-                    // Reset to original row state
-                    this.innerHTML = `
-                        <td>${cell1.innerHTML}</td>
-                        <td>Next Water</td>
-                        <td>Frequency</td>
-                        <td>TBD</td>
-                    `;
-                } else {
-                    this.classList.add('expanded');
-                    // Show additional info and delete button
-                    this.innerHTML = `
-                        <td>${cell1.innerHTML}</td>
-                        <td>Next Water</td>
-                        <td>Frequency</td>
-                        <td>TBD</td>
-                        <td>Additional Info</td>
-                        <td><button class="btn btn-danger delete-row">X</button></td>
-                    `;
-                    this.querySelector('.delete-row').addEventListener('click', function(e) {
-                        e.stopPropagation();  // Prevent triggering row's click event
-                        newRow.remove();  // Remove the row
-                    });
-                    }
-                });
-            });
-        });
-    });
-</script>
