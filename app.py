@@ -6,10 +6,13 @@ import json
 from datetime import datetime, timedelta
 from flask import Flask, render_template, request, redirect, url_for
 
+from backend import perenual_query_api as query_api
+
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
 TODAY = datetime.today()
+perenual_msg = "Upgrade Plans To Premium/Supreme - https://perenual.com/subscription-api-pricing. I'm sorry"
 
 def read_plants_data():
     with open('plants.json', 'r') as file:
@@ -84,17 +87,58 @@ def calculate_watering_frequency(min_precip, max_precip, local_precip):
     
     return int(adjusted_frequency)
 
+def get_watering(query: str):
+    plants = query_api(query)
+
+    if len(plants) == 1:
+        return plants['watering']
+    if len(plants) == 0:
+        print(f"Got no result back from perenual API with query: '{query}'")
+        return "NOPE"
+    if len(plants) > 10:
+        print(f"Got {len(plants)} results back from perenual API, please narrow your query.")
+        return "NOPE"
+    if len(plants) > 1: # Just use the first one that is valid for now:
+        for plant in plants:
+            if plant['watering'] != perenual_msg:
+                return plant['watering']
+        return perenual_msg
+
 @app.route('/add-plant', methods=['POST'])
 def add_plant():
     plant_name = request.form['plant_name']
     position = int(request.form['position'])
     date_added = datetime.now().strftime("%Y-%m-%d")
-    water_schedule = 3
+    water_schedule = get_watering("plant_name")
+    if water_schedule == "NOPE":
+        return
+    if water_schedule == perenual_msg:
+        print("Perenual charges for subscription to view this plant's data, look it up and replace it!")
+        water_schedule = "Average"
     food_schedule = 2
-    if position in [1,2]:
+    if position in [1,2]: # Inside plants:
         repotting_schedule = 6
+        if water_schedule == "Average":
+            water_schedule = 5
+        elif water_schedule == "Frequent":
+            water_schedule = 3
+        elif water_schedule == "Minimum":
+            water_schedule = 14
+        elif water_schedule == "None":
+            water_schedule = 9999
     else:
         repotting_schedule = 0
+        if water_schedule == "Average":
+            water_schedule = 3
+        elif water_schedule == "Frequent":
+            water_schedule = 1
+        elif water_schedule == "Minimum":
+            water_schedule = 7
+        elif water_schedule == "None":
+            water_schedule = 9999
+    # Check water_schedule to confirm it is now an int:
+    if type(water_schedule) != int:
+        raise ValueError(f"Water schedule is not an int??: {water_schedule}")
     temperature_min = request.form.get('temperature_min', None)
     temperature_max = request.form.get('temperature_max', None)
     

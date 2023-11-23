@@ -71,31 +71,31 @@
                             </form>
                         </div>
                         <table id="isl-plant-table" class="table plant-table">
-                        <thead>
-                            <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Next Water</th>
-                            <th scope="col">Frequency</th>
-                            <th scope="col">Events</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for plant in organized_data[1] %} <!-- '0' for Front Yard, '1' for ISL, etc. -->
-                            <tr>
-                                <td>{{ plant.name }}</td>
-                                <td>{{ plant.today_water }}</td>
-                                <td>{{ plant.water_schedule }} days</td>
-                                <td>
-                                    {% if plant.food_event %}
-                                    <span>Food!</span><br>
-                                    {% endif %}
-                                    {% if plant.repotting_event %}
-                                    <span>Check pot!</span>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
+                            <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Next Water</th>
+                                    <th scope="col">Frequency</th>
+                                    <th scope="col">Events</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for plant in organized_data[1] %} <!-- '0' for Front Yard, '1' for ISL, etc. -->
+                                <tr>
+                                    <td>{{ plant.name }}</td>
+                                    <td>{{ plant.today_water }}</td>
+                                    <td>{{ plant.water_schedule }} days</td>
+                                    <td>
+                                        {% if plant.food_event %}
+                                        <span>Food!</span><br>
+                                        {% endif %}
+                                        {% if plant.repotting_event %}
+                                        <span>Check pot!</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -115,36 +115,36 @@
                             </form>
                         </div>
                         <table id="ill-plant-table" class="table plant-table">
-                        <thead>
-                            <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Next Water</th>
-                            <th scope="col">Frequency</th>
-                            <th scope="col">Events</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for plant in organized_data[2] %} <!-- '0' for Front Yard, '1' for ISL, etc. -->
-                            <tr>
-                                <td>{{ plant.name }}</td>
-                                <td>{{ plant.today_water }}</td>
-                                <td>{{ plant.water_schedule }} days</td>
-                                <td>
-                                    {% if plant.food_event %}
-                                    <span>Food!</span><br>
-                                    {% endif %}
-                                    {% if plant.repotting_event %}
-                                    <span>Check pot!</span>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
+                            <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Next Water</th>
+                                    <th scope="col">Frequency</th>
+                                    <th scope="col">Events</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for plant in organized_data[2] %} <!-- '0' for Front Yard, '1' for ISL, etc. -->
+                                <tr>
+                                    <td>{{ plant.name }}</td>
+                                    <td>{{ plant.today_water }}</td>
+                                    <td>{{ plant.water_schedule }} days</td>
+                                    <td>
+                                        {% if plant.food_event %}
+                                        <span>Food!</span><br>
+                                        {% endif %}
+                                        {% if plant.repotting_event %}
+                                        <span>Check pot!</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            
+
             <!-- Back Yard -->
             <div class="col-4">
                 <div class="card full-height-panel panel" style="background-color:rgb(105, 174, 105);">
@@ -162,35 +162,95 @@
                             </form>
                         </div>
                         <table id="backyard-plant-table" class="table plant-table">
-                        <thead>
-                            <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Next Water</th>
-                            <th scope="col">Frequency</th>
-                            <th scope="col">Events</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for plant in organized_data[3] %} <!-- '0' for Front Yard, '1' for ISL, etc. -->
-                            <tr>
-                                <td>{{ plant.name }}</td>
-                                <td>{{ plant.today_water }}</td>
-                                <td>{{ plant.water_schedule }} days</td>
-                                <td>
-                                    {% if plant.food_event %}
-                                    <span>Food!</span><br>
-                                    {% endif %}
-                                    {% if plant.repotting_event %}
-                                    <span>Check pot!</span>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
+                            <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Next Water</th>
+                                    <th scope="col">Frequency</th>
+                                    <th scope="col">Events</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for plant in organized_data[3] %} <!-- '0' for Front Yard, '1' for ISL, etc. -->
+                                <tr>
+                                    <td>{{ plant.name }}</td>
+                                    <td>{{ plant.today_water }}</td>
+                                    <td>{{ plant.water_schedule }} days</td>
+                                    <td>
+                                        {% if plant.food_event %}
+                                        <span>Food!</span><br>
+                                        {% endif %}
+                                        {% if plant.repotting_event %}
+                                        <span>Check pot!</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
+        <!--<div class="modal fade" id="plantSelectionModal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTitle">Select the Correct Plant</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modalBody">-->
+                        <!-- Plant buttons will be added here by JavaScript -->
+                    <!--</div>
+                </div>
+            </div>
+        </div>-->
     </body>
 </html>
+<!--<script>
+    document.getElementById('yourFormId').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        // Get the plant name from the input field
+        var plantName = document.getElementById('yourInputFieldId').value;
+
+        // Call your Flask backend with the plant name
+        fetch('/search-plant', {
+            method: 'POST',
+            body: JSON.stringify({ plant_name: plantName }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                var modalBody = document.getElementById('modalBody');
+                modalBody.innerHTML = ''; // Clear previous content
+
+                // Create buttons for each plant and append to the modal body
+                data.forEach(plant => {
+                    var btn = document.createElement('button');
+                    btn.innerText = plant.common_name;
+                    btn.addEventListener('click', function () {
+                        // Call function to handle selection
+                        handlePlantSelection(plant);
+                    });
+                    modalBody.appendChild(btn);
+                });
+
+                // Show the modal
+                $('#plantSelectionModal').modal('show');
+            });
+    });
+
+    function handlePlantSelection(plant) {
+        // Logic to handle the selected plant
+        // Hide the modal
+        $('#plantSelectionModal').modal('hide');
+
+        // You can proceed to add the plant as if it was the only result
+        // Or send another request to your backend with the selected plant's details
+    }
+</script>-->
