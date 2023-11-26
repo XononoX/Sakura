@@ -46,47 +46,6 @@ def is_event_today_or_tomorrow(date_added, schedule, unit):
         next_event_date += period
     return next_event_date <= (TODAY + timedelta(days=1))
 
-# Define a multiplier based on the month to represent seasonal changes
-def seasonal_water_multiplier(month):
-    # Example: Increase watering frequency by 50% in summer months (June to August)
-    if 6 <= month <= 8:
-        return 1.5
-    if 4 <= month <= 10:
-        return 1.3
-    return 1.0
-
-def calculate_watering_frequency(min_precip, max_precip, local_precip):
-    # Assume local_precip is the local average precipitation you have determined for your area
-    # min_precip and max_precip are from the Trefle API data
-
-    # Calculate the average precipitation requirement
-    avg_precip_need = (min_precip + max_precip) / 2
-    # Calculate the deficit
-    precip_deficit = max(avg_precip_need - local_precip, 0)
-
-    # Now convert this deficit into a watering frequency
-    # The following is just an example and should be adjusted based on actual gardening knowledge:
-    # If precip_deficit is 0, the plant does not need additional water (it may even need less)
-    if precip_deficit == 0:
-        return 'Check soil moisture before watering'
-    
-    # Example: If deficit is 25 mm, water once a week; adjust thresholds as needed
-    if precip_deficit <= 25:
-        base_frequency = 7  # days
-    elif precip_deficit <= 50:
-        base_frequency = 5
-    else:
-        base_frequency = 3
-    
-    # Adjust the frequency based on the season
-    current_month = datetime.datetime.now().month
-    frequency_multiplier = seasonal_water_multiplier(current_month)
-    
-    # Reduce the base frequency by the multiplier, ensuring it's at least every other day
-    adjusted_frequency = max(base_frequency / frequency_multiplier, 2)
-    
-    return int(adjusted_frequency)
-
 def get_watering(query: str):
     plants = query_api(query)
 
@@ -161,52 +120,6 @@ def add_plant():
     write_plants_data(plants_data)
     
     return redirect(url_for('home'))
-
-@app.route('/get-plant-details', methods=['POST'])
-def get_plant_details():
-    data = request.get_json()
-    plant_id = int(data['plantId'])
-
-    plants = read_plants_data()
-    for plant in plants:
-        if plant['id'] == plant_id:
-            return jsonify(plant)
-    raise Exception(f"Failed to find plant with id={plant_id}")
-
-@app.route('/update-plant', methods=['POST'])
-def update_plant():
-    data = request.get_json()
-    plant_id = int(data['plantId'])
-    new_frequency = [int(s) for s in data['frequency'].split() if s.isdigit()][0]
-    update_data = {
-        'position': int(data['position']),
-        'water_schedule': new_frequency
-    }
-    breakpoint() # REMOVE
-
-    plants = read_plants_data()
-    for plant in plants:
-        if plant['id'] == plant_id:
-            plant.update(update_data)
-            break
-
-    write_plants_data(plants)
-
-    return jsonify({'status': 'success', 'message': 'Plant updated successfully.'})
-
-@app.route('/delete-plant', methods=['POST'])
-def delete_plant():
-    data = request.get_json()
-    plant_id = int(data['plantId'])
-
-    plants = read_plants_data()
-    plants = [plant for plant in plants if plant['id'] != plant_id]
-
-    breakpoint() # REMOVE
-
-    write_plants_data(plants)
-
-    return jsonify({'status': 'success', 'message': 'Plant deleted successfully.'})
 
 @app.route('/')
 def home():
