@@ -227,14 +227,14 @@
                 let plantEvents = row.cells[3].innerText; // Events are in the fourth cell
 
                 if (row && row.classList.contains('expanded')) {
+                    // Collapse row
                     row.classList.remove('expanded');
-                    // Reset to original row state
-                    row.innerHTML = `
-                    <td>${plantName}</td>
-                    <td>${plantTodayWater}</td>
-                    <td>${plantWaterSchedule}</td>
-                    <td>${plantEvents}</td>
-                `;
+                    if (row.nextElementSibling && row.nextElementSibling.classList.contains('expanded-info')) {
+                        table.deleteRow(row.rowIndex + 1); // Remove the first expanded content row
+                        if (row.nextElementSibling && row.nextElementSibling.classList.contains('expanded-info')) {
+                            table.deleteRow(row.rowIndex + 1); // Remove the second expanded content row
+                        }
+                    }
                 } else if (row && !row.classList.contains('expanded') && !table.querySelector('.expanded')) {
                     row.classList.add('expanded');
                     fetch('/get-plant-details', {
@@ -254,7 +254,7 @@
                                 switch (i) {
                                     case 0: cell.innerHTML = `Food: ${data.food_schedule} months`; break;
                                     case 1: cell.innerHTML = `Repot: ${data.repotting_schedule} months`; break;
-                                    case 2: cell.innerHTML = `Date: ${data.date_added}`; break;
+                                    case 2: cell.innerHTML = `Date Added: ${data.date_added}`; break;
                                     case 3: cell.innerHTML = `Position: ${data.position}`; break;
                                 }
                             }
@@ -364,13 +364,20 @@
                 .catch(error => console.error('Error:', error));
         }
     });
-    // Add an event listener to the document to collapse expanded rows when clicking outside
+    // Collapse expanded rows when clicking outside
     document.addEventListener('click', function (event) {
-        let expandedRow = table.querySelector('.expanded + tr'); // Selects the row immediately following an expanded row
-        let expanded = table.querySelector('.expanded');
-        if (expandedRow && expanded && !expanded.contains(event.target)) {
-            expanded.classList.remove('expanded');
-            expandedRow.remove(); // Remove the expanded content row
-        }
+        let tables = document.querySelectorAll('.plant-table');
+        tables.forEach(table => {
+            let expandedRow = table.querySelector('tr.expanded');
+            if (expandedRow && !expandedRow.contains(event.target)) {
+                expandedRow.classList.remove('expanded');
+                if (expandedRow.nextElementSibling && expandedRow.nextElementSibling.classList.contains('expanded-info')) {
+                    table.deleteRow(expandedRow.rowIndex + 1);
+                    if (expandedRow.nextElementSibling && expandedRow.nextElementSibling.classList.contains('expanded-info')) {
+                        table.deleteRow(expandedRow.rowIndex + 1);
+                    }
+                }
+            }
+        });
     }, true);
 </script>
