@@ -8,7 +8,7 @@ tokens = {}
 with open("creds", "r") as creds:
     for line in creds:
         key, value = line.strip().split("=")
-        tokens[key] = value
+        tokens[key] = value.replace('"', '')
 
 
 def trefle_find_plant(query: str):

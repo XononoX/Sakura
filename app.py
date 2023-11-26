@@ -4,7 +4,7 @@ This defines the Flask scripting for the Sakura front-end
 
 import json
 from datetime import datetime, timedelta
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 
 from backend import perenual_query_api as query_api
 
@@ -109,7 +109,7 @@ def add_plant():
     plant_name = request.form['plant_name']
     position = int(request.form['position'])
     date_added = datetime.now().strftime("%Y-%m-%d")
-    water_schedule = get_watering("plant_name")
+    water_schedule = get_watering(plant_name)
     if water_schedule == "NOPE":
         return
     if water_schedule == perenual_msg:
@@ -123,7 +123,7 @@ def add_plant():
         elif water_schedule == "Frequent":
             water_schedule = 3
         elif water_schedule == "Minimum":
-            water_schedule = 14
+            water_schedule = 10
         elif water_schedule == "None":
             water_schedule = 9999
     else:
@@ -161,6 +161,52 @@ def add_plant():
     write_plants_data(plants_data)
     
     return redirect(url_for('home'))
+
+@app.route('/get-plant-details', methods=['POST'])
+def get_plant_details():
+    data = request.get_json()
+    plant_id = int(data['plantId'])
+
+    plants = read_plants_data()
+    for plant in plants:
+        if plant['id'] == plant_id:
+            return jsonify(plant)
+    raise Exception(f"Failed to find plant with id={plant_id}")
+
+@app.route('/update-plant', methods=['POST'])
+def update_plant():
+    data = request.get_json()
+    plant_id = int(data['plantId'])
+    new_frequency = [int(s) for s in data['frequency'].split() if s.isdigit()][0]
+    update_data = {
+        'position': int(data['position']),
+        'water_schedule': new_frequency
+    }
+    breakpoint() # REMOVE
+
+    plants = read_plants_data()
+    for plant in plants:
+        if plant['id'] == plant_id:
+            plant.update(update_data)
+            break
+
+    write_plants_data(plants)
+
+    return jsonify({'status': 'success', 'message': 'Plant updated successfully.'})
+
+@app.route('/delete-plant', methods=['POST'])
+def delete_plant():
+    data = request.get_json()
+    plant_id = int(data['plantId'])
+
+    plants = read_plants_data()
+    plants = [plant for plant in plants if plant['id'] != plant_id]
+
+    breakpoint() # REMOVE
+
+    write_plants_data(plants)
+
+    return jsonify({'status': 'success', 'message': 'Plant deleted successfully.'})
 
 @app.route('/')
 def home():
