@@ -1,7 +1,7 @@
 {
     "plants": [
         {
-            "id": 1,
+            "id": 0,
             "position": 0,
             "name": "Ficus Tree",
             "date_added": "2023-11-05",
@@ -12,7 +12,7 @@
             "temperature_max": null
         },
         {
-            "id": 2,
+            "id": 1,
             "position": 1,
             "name": "Pepper Plant",
             "date_added": "2023-11-05",
@@ -23,7 +23,7 @@
             "temperature_max": null
         },
         {
-            "id": 3,
+            "id": 2,
             "position": 3,
             "name": "Hong Kong Orchid",
             "date_added": "2023-11-05",
@@ -34,11 +34,22 @@
             "temperature_max": null
         },
         {
+            "id": 3,
+            "position": 2,
+            "name": "Philodendron",
+            "date_added": "2023-11-05",
+            "water_schedule": 5,
+            "food_schedule": 2,
+            "repotting_schedule": 6,
+            "temperature_min": null,
+            "temperature_max": null
+        },
+        {
             "id": 4,
             "position": 2,
-            "name": "Hanging Guy 1",
+            "name": "Philodendron",
             "date_added": "2023-11-05",
-            "water_schedule": 3,
+            "water_schedule": 5,
             "food_schedule": 2,
             "repotting_schedule": 6,
             "temperature_min": null,
@@ -46,12 +57,12 @@
         },
         {
             "id": 5,
-            "position": 2,
-            "name": "Hanging Guy 2",
-            "date_added": "2023-11-05",
+            "position": 0,
+            "name": "Bougainvillea",
+            "date_added": "2023-12-03",
             "water_schedule": 3,
             "food_schedule": 2,
-            "repotting_schedule": 6,
+            "repotting_schedule": 0,
             "temperature_min": null,
             "temperature_max": null
         }

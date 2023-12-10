@@ -2,6 +2,7 @@
 import json
 import pandas as pd
 import requests
+import boto3
 from datetime import datetime, timedelta
 
 tokens = {}
@@ -121,16 +122,16 @@ def perenual_pull_species_list(page=1):
             json.dump(data, file, indent=4)
     else:
         print(f"Failed to retrieve plants data, Status Code: {response.status_code}")
-
 def perenual_query_api(query: str):
-    call = f"https://perenual.com/api/species-list?key={tokens['PERENUAL_TOKEN']}&q={query}"
+    query = query.lower()
+    call = f"https://perenual.com/api/species-list?key={tokens['PERENUAL_TOKEN']}&q={query.lower()}"
     print(f"Running perenual API search:\n{call}")
     response = requests.get(call)
 
     if response.status_code == 200:
         data = response.json()
 
-        filename = f"perenual_jsons/query_{query.replace(' ', '_')}.json"
+        filename = f"perenual_jsons/query_{query.lower().replace(' ', '_')}.json"
         with open(filename, 'w') as file:
             json.dump(data, file, indent=4)
         return data['data']
@@ -138,7 +139,28 @@ def perenual_query_api(query: str):
         print(f"Failed to retrieve plants data, Status Code: {response.status_code}")
         return []
 
-def read_plant_data(filename='plants.json'):
+    
+s3 = boto3.client('s3')
+bucket_name = 'plants-data'
+file_name = 'plant_data.json'
+def read_from_s3():
+    try:
+        data = s3.get_object(Bucket=bucket_name, Key=file_name)
+        plants_data = json.loads(data['Body'].read().decode('utf-8'))
+        return plants_data
+        #return plants_data['plants']
+    except Exception as e:
+        print(e)
+        return None  # or handle error appropriately
+def write_to_s3(data):
+    try:
+        s3.put_object(Bucket=bucket_name, Key=file_name, Body=json.dumps(data))
+        print("Success!")
+    except Exception as e:
+        print(e)
+
+
+def read_local_plant_data(filename='plants.json'):
     with open(filename, 'r') as file:
         data = json.load(file)
-    return data['data']
+    return data['plants']

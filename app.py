@@ -6,22 +6,20 @@ import json
 from datetime import datetime, timedelta
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 
-from backend import perenual_query_api as query_api
+from backend import read_from_s3, write_to_s3, perenual_query_api as query_api
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
 TODAY = datetime.today()
+TOMORROW = TODAY + timedelta(days=1)
 perenual_msg = "Upgrade Plans To Premium/Supreme - https://perenual.com/subscription-api-pricing. I'm sorry"
 
 def read_plants_data():
-    with open('plants.json', 'r') as file:
-        data = json.load(file)
-    return data['plants']
+    return read_from_s3()
 
 def write_plants_data(plants_data):
-    with open('plants.json', 'w') as file:
-        json.dump({'plants': plants_data}, file, indent=4)
+    write_to_s3(plants_data)
 
 def get_next_plant_id(plants_data):
     return max([plant.get('id', 0) for plant in plants_data] + [0]) + 1
@@ -50,7 +48,7 @@ def get_watering(query: str):
     plants = query_api(query)
 
     if len(plants) == 1:
-        return plants['watering']
+        return plants[0]['watering']
     if len(plants) == 0:
         print(f"Got no result back from perenual API with query: '{query}'")
         return "NOPE"
@@ -127,8 +125,13 @@ def home():
     # Pass this data to the template
     plants_data = read_plants_data()
     for plant in plants_data:
-        plant['next_water'] = calculate_next_water_date(plant['date_added'], int(plant['water_schedule']))
-        plant['today_water'] = "Today!" if plant['next_water'] == TODAY.strftime("%Y-%m-%d") else plant['next_water']
+        next_water = calculate_next_water_date(plant['date_added'], int(plant['water_schedule']))
+        if next_water == TODAY.strftime("%Y-%m-%d"):
+            plant['next_water'] = "Today!"
+        elif next_water == TOMORROW.strftime("%Y-%m-%d"):
+            plant['next_water'] = "Tomorrow"
+        else:
+           plant['next_water'] = next_water
         plant['food_event'] = is_event_today_or_tomorrow(plant['date_added'], int(plant['food_schedule']), 'months')
         plant['repotting_event'] = is_event_today_or_tomorrow(plant['date_added'], int(plant['repotting_schedule']), 'months')
     # Organize data by position for display

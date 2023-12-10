@@ -35,7 +35,7 @@
                                 {% for plant in organized_data[0] %} <!-- '0' for Front Yard, '1' for ISL, etc. -->
                                 <tr data-plant-id={{ plant.id }}>
                                     <td>{{ plant.name }}</td>
-                                    <td>{{ plant.today_water }}</td>
+                                    <td>{{ plant.next_water }}</td>
                                     <td>{{ plant.water_schedule }} days</td>
                                     <td>
                                         {% if plant.food_event %}
@@ -83,7 +83,7 @@
                                 {% for plant in organized_data[1] %} <!-- '0' for Front Yard, '1' for ISL, etc. -->
                                 <tr data-plant-id={{ plant.id }}>
                                     <td>{{ plant.name }}</td>
-                                    <td>{{ plant.today_water }}</td>
+                                    <td>{{ plant.next_water }}</td>
                                     <td>{{ plant.water_schedule }} days</td>
                                     <td>
                                         {% if plant.food_event %}
@@ -127,7 +127,7 @@
                                 {% for plant in organized_data[2] %} <!-- '0' for Front Yard, '1' for ISL, etc. -->
                                 <tr data-plant-id={{ plant.id }}>
                                     <td>{{ plant.name }}</td>
-                                    <td>{{ plant.today_water }}</td>
+                                    <td>{{ plant.next_water }}</td>
                                     <td>{{ plant.water_schedule }} days</td>
                                     <td>
                                         {% if plant.food_event %}
@@ -174,7 +174,7 @@
                                 {% for plant in organized_data[3] %} <!-- '0' for Front Yard, '1' for ISL, etc. -->
                                 <tr data-plant-id={{ plant.id }}>
                                     <td>{{ plant.name }}</td>
-                                    <td>{{ plant.today_water }}</td>
+                                    <td>{{ plant.next_water }}</td>
                                     <td>{{ plant.water_schedule }} days</td>
                                     <td>
                                         {% if plant.food_event %}
