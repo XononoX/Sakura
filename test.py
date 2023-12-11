@@ -145,20 +145,6 @@ def write_plants_data(plants_data):
 #write_plants_data(data)
 #write_to_s3(data)
 
-from datetime import datetime, timedelta
-from flask import Flask, render_template, request, redirect, url_for, jsonify
-
-from backend import read_from_s3, write_to_s3, perenual_query_api as query_api
-
-app = Flask(__name__)
-app.config['DEBUG'] = True
-
-TODAY = datetime.today()
-TOMORROW = TODAY + timedelta(days=1)
-
-print(TODAY.strftime("%Y-%m-%d"))
-print(TOMORROW.strftime("%Y-%m-%d"))
-
 
 #new_data = {
 #    'water_schedule': 5,
